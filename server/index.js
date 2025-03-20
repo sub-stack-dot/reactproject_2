@@ -18,6 +18,18 @@ app.post('/register',(req,res) =>{
     .catch(err=>res.json(err))
 })
 
+app.post('/login',(req,res)=>{
+    const{email, password}=req.body;
+    StudentModel.findOne({email})
+    .then(user=>{
+        if(user){
+            console.log(user)
+        }else{
+            res.json("No record existed")
+        }
+    }).catch(err =>res.json(err))
+})
+
 app.listen(3001, ()=>{
     console.log("Server is Running !")
 })

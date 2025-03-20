@@ -2,9 +2,8 @@ import React, {useState} from 'react';
 import axios from 'axios';
 import{useNavigate} from 'react-router-dom';
 
-function Registration(){
-    const [formData,setFormData]= useState({fullName:"", email:"", password:""});
-    const navigate = useNavigate();
+function Login(){
+    const [formData,setFormData]= useState({email:"", password:""});
 
     const handleChange=(e)=>{
         const {name,value}=e.target;
@@ -16,10 +15,10 @@ function Registration(){
     const handleSubmit = async (e)=>{
         e.preventDefault();
         try{
-            const response=await axios.post("http://localhost:3001/register",formData);
-            console.log('Registration Successful:',response.data);
-            alert('Registration Successful!');
-            navigate('/login');
+            const response=await axios.post("http://localhost:3001/login",formData);
+            console.log('Login Successful:',response.data);
+            alert('Login Successful!');
+            // navigate('/');
         }
         catch(error){
             console.error('Error:',error.response?.data|| error.messege);
@@ -27,20 +26,18 @@ function Registration(){
         }
     };
 
-
-
-    return (
-        <div className="container mt-5">
+  return (
+    <div className="container mt-5">
           <div className="row justify-content-center">
             <div className="col-md-6">
               <div className="card">
                 <div className="card-header bg-primary text-white text-center">
-                  <h3>Register</h3>
+                  <h3>Login</h3>
                 </div>
                 <div className="card-body">
                   <form onSubmit={handleSubmit}>
                     {/* Full Name Field */}
-                    <div className="mb-3">
+                    {/* <div className="mb-3">
                       <label htmlFor="fullName" className="form-label">Full Name</label>
                       <input
                         type="text"
@@ -51,7 +48,7 @@ function Registration(){
                         onChange={handleChange}
                         required
                       />
-                    </div>
+                    </div> */}
       
                     {/* Email Field */}
                     <div className="mb-3">
@@ -83,15 +80,20 @@ function Registration(){
       
                     {/* Submit Button */}
                     <button type="submit" className="btn btn-primary w-100">
-                      Register
+                      Login
                     </button>
                   </form>
+                  <p>Don't have an account?</p>
+                  <button className="btn btn-primary w-100 bg-light rounded-0 text-decoration-none" >
+                    Register
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      );
+  )
 }
 
-export default Registration
+export default Login
+

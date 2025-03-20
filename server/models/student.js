@@ -6,5 +6,5 @@ const StudentSchema = new mongoose.Schema({
     password: String
 })
 
-const StudentModel = mongoose.model("students", StudentSchema)
-module.exports= StudentModel
+const StudentModel = mongoose.model("students", StudentSchema);
+export default StudentModel;
