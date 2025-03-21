@@ -2,8 +2,11 @@ import React, {useState} from 'react';
 import axios from 'axios';
 import{useNavigate} from 'react-router-dom';
 
+
 function Login(){
     const [formData,setFormData]= useState({email:"", password:""});
+    const [errorMessage, setErrorMessage] = useState("");
+    const navigate = useNavigate();
 
     const handleChange=(e)=>{
         const {name,value}=e.target;
@@ -12,17 +15,19 @@ function Login(){
             [name]:value
         });
     };
+
+    axios.defaults.withCredentials = true;
     const handleSubmit = async (e)=>{
         e.preventDefault();
         try{
             const response=await axios.post("http://localhost:3001/login",formData);
             console.log('Login Successful:',response.data);
             alert('Login Successful!');
-            // navigate('/');
+             navigate('/Home');
         }
         catch(error){
-            console.error('Error:',error.response?.data|| error.messege);
-            alert('Registration faild.Please try again.');
+          console.error('Error:', error.response?.data || error.message || "Unknown error");
+          alert('Login Failed, please register.');
         }
     };
 
@@ -79,13 +84,13 @@ function Login(){
                     </div>
       
                     {/* Submit Button */}
-                    <button type="submit" className="btn btn-primary w-100">
+                    <button type="submit" className="btn btn-primary w-100" >
                       Login
                     </button>
                   </form>
                   <p>Don't have an account?</p>
-                  <button className="btn btn-primary w-100 bg-light rounded-0 text-decoration-none" >
-                    Register
+                  <button className="btn btn-primary w-100 " onClick={()=>navigate('/register')}>
+                      Register
                   </button>
                 </div>
               </div>

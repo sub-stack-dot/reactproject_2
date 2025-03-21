@@ -5,11 +5,23 @@ import cookieParser from 'cookie-parser'
 import jwt from 'jsonwebtoken'
 import StudentModel from './models/student.js'
 
-const app=express()
-app.use(express.json())
-app.use(cors())
+const app=express();
+app.use(express.json());
+app.use(cookieParser());
+app.use(cors({
+    origin: "http://localhost:3000", 
+    credentials: true, 
+}));
 
-mongoose.connect('mongodb://localhost:27017/school')
+mongoose.connect('mongodb://localhost:27017/school'),{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}
+
+//const cors = require("cors");
+
+//app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+
 
 app.post('/register',(req,res) =>{
     const{fullname, email, password}=req.body;
@@ -23,7 +35,16 @@ app.post('/login',(req,res)=>{
     StudentModel.findOne({email})
     .then(user=>{
         if(user){
-            console.log(user)
+           if(user.password === password){
+            const accessToken = jwt.sign({email:email},
+                "jwt-access-token-secret-key",{expiresIn:'1m'})
+            const refreshToken = jwt.sign({email:email},
+                "jwt-refresh-token-secret-key",{expiresIn: '5m'}) 
+                res.cookie('accessToken',accessToken,{maxAge:60000}) 
+                res.cookie('refreshToken',accessToken,{maxAge:30000, httpOnly:true,secure:true, sameSite:'strict'})  
+                res.json("Login Successful")
+  
+           }
         }else{
             res.json("No record existed")
         }
